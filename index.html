@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة التركس - حساب النتائج</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>لعبة التركس - حساب النتائج</h1>
+        <div class="player-names">
+            <input type="text" id="player1" placeholder="اسم اللاعب الأول">
+            <input type="text" id="player2" placeholder="اسم اللاعب الثاني">
+            <button id="start-game">ابدأ اللعبة</button>
+        </div>
+        <div class="game hidden">
+            <h2 id="players"></h2>
+            <div class="round">
+                <h3>المملكة رقم 1</h3>
+                <select id="kingdom-choice">
+                    <option value="D">Diamonds</option>
+                    <option value="L">Ltoosh</option>
+                    <option value="B">Queens</option>
+                    <option value="K">King</option>
+                    <option value="T">Trix</option>
+                </select>
+                <button id="add-score">إضافة النقاط</button>
+            </div>
+            <div class="results">
+                <ul id="score-list"></ul>
+                <p id="total-score">المجموع الكلي: 0</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

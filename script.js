@@ -9,7 +9,7 @@ const options = [
   { value: "T", text: "Trix" },
 ];
 let scores = [];
- document.getElementById("exit-game").addEventListener("click", exitGame);
+document.getElementById("exit-game").addEventListener("click", exitGame);
 document.getElementById("start-game").addEventListener("click", () => {
   const player1 = document.getElementById("player1").value.trim();
   const player2 = document.getElementById("player2").value.trim();
@@ -18,9 +18,7 @@ document.getElementById("start-game").addEventListener("click", () => {
     alert("يرجى إدخال أسماء اللاعبين.");
     return;
   }
-  document.getElementById(
-    "players"
-  ).textContent = `${player1} ، ${player2}`;
+  document.getElementById("players").textContent = `${player1} ، ${player2}`;
   document.querySelector(".player-names").classList.add("hidden");
   document.querySelector(".game").classList.remove("hidden");
 });
@@ -29,44 +27,42 @@ function resetGame() {
   document.querySelector(".game").classList.add("hidden");
   document.querySelector(".player-names").classList.remove("hidden");
 
-window.location.reload();
-
+  window.location.reload();
 }
 
 function exitGame() {
-  if(totalScore > 0) {
+  console.log("game is done");
+  if (totalScore > 0) {
     playWinning();
-    setTimeout(function() {
-      alert("You win! 🥳🥳🥳🥳🥳 ")
-    resetGame();
+    setTimeout(function () {
+      alert("You win! 🥳🥳🥳🥳🥳 ");
+      resetGame();
     }, 3000);
-  } else if(totalScore === 0) {
+  } else if (totalScore === 0) {
     playDraw();
-    setTimeout(function() {
+    setTimeout(function () {
       alert("العب ختيار لتحديد الفائز");
-    resetGame();
+      resetGame();
+    }, 3000);
+  } else {
+    playLaugh();
+    setTimeout(function () {
+      alert("You lose! 😭😭😭😭😭");
+      resetGame();
     }, 3000);
   }
-  
-  else {
-    playLaugh();
-    setTimeout(function() {
-      alert("You lose! 😭😭😭😭😭");
-    resetGame();
-    }, 3000); 
-   }
 }
 
 document.getElementById("add-score").addEventListener("click", () => {
-    const kingdomChoice = document.getElementById("kingdom-choice").value;
-    const category = kingdomChoice.split("-")[0];
+  const kingdomChoice = document.getElementById("kingdom-choice").value;
+  const category = kingdomChoice.split("-")[0];
 
-    if (usedChoices.some((choice) => choice.startsWith(category))) {
-        alert(`تم استخدام تصنيف ${category} بالفعل في هذه المملكة!`);
-        return;
-    }
+  if (usedChoices.some((choice) => choice.startsWith(category))) {
+    alert(`تم استخدام تصنيف ${category} بالفعل في هذه المملكة!`);
+    return;
+  }
 
-    let score = 0;
+  let score = 0;
   // Handle each category separately
   switch (category) {
     case "D": {
@@ -125,173 +121,191 @@ document.getElementById("add-score").addEventListener("click", () => {
     }
   }
 
+  // Add the score to our scores array
+  scores.push({ category, score, kingdom: currentKingdom });
+  addScoreToList(category, score, scores.length - 1);
 
-    // Add the score to our scores array
-    scores.push({ category, score, kingdom: currentKingdom });
-    addScoreToList(category, score, scores.length - 1);
+  // Update totals and used choices
+  updateTotalScore();
+  usedChoices.push(kingdomChoice);
 
-    // Update totals and used choices
-    updateTotalScore();
-    usedChoices.push(kingdomChoice);
+  // Remove the selected option from dropdown
+  const selectElement = document.getElementById("kingdom-choice");
+  const selectedOption = selectElement.querySelector(
+    `option[value="${kingdomChoice}"]`
+  );
+  if (selectedOption) {
+    selectedOption.remove();
+  }
 
-    // Remove the selected option from dropdown
-    const selectElement = document.getElementById("kingdom-choice");
-    const selectedOption = selectElement.querySelector(`option[value="${kingdomChoice}"]`);
-    if (selectedOption) {
-        selectedOption.remove();
-    }
-
-    // Handle kingdom completion
-    if (usedChoices.length === 5) {
-        handleKingdomCompletion();
-    }
+  // Handle kingdom completion
+  if (usedChoices.length === 5) {
+    handleKingdomCompletion();
+  }
 });
 
 function addScoreToList(category, score, index) {
-    const scoreList = document.getElementById("score-list");
-    const listItem = document.createElement("li");
-    
-    // Create the display element
-    const displaySpan = document.createElement("span");
-    displaySpan.textContent = `${category}   ${score === 0 ? '-----' : score}`;
-    
-    // Create edit button
-    const editButton = document.createElement("button");
-    editButton.textContent = "تعديل";
-    editButton.style.margin = "10px";
-    editButton.style.padding = "5px 10px";
-    editButton.style.fontSize = "0.8em";
-    
-    // Add click handler for edit
-    editButton.onclick = () => editScore(index, category);
-    
-    // Assemble the list item
-    listItem.appendChild(displaySpan);
-    listItem.appendChild(editButton);
-    listItem.dataset.index = index;
-    
-    scoreList.appendChild(listItem);
+  const scoreList = document.getElementById("score-list");
+  const listItem = document.createElement("li");
+
+  // Create the display element
+  const displaySpan = document.createElement("span");
+  displaySpan.textContent = `${category}   ${score === 0 ? "-----" : score}`;
+
+  // Create edit button
+  const editButton = document.createElement("button");
+  editButton.textContent = "تعديل";
+  editButton.style.margin = "10px";
+  editButton.style.padding = "5px 10px";
+  editButton.style.fontSize = "0.8em";
+
+  // Add click handler for edit
+  editButton.onclick = () => editScore(index, category);
+
+  // Assemble the list item
+  listItem.appendChild(displaySpan);
+  listItem.appendChild(editButton);
+  listItem.dataset.index = index;
+
+  scoreList.appendChild(listItem);
 }
 
 function editScore(index, category) {
-    let newScore = 0;
-    
-    switch (category) {
-        case "D": {
-            const value = prompt("أدخل رقمًا بين 0 و 13 لديناري:", Math.abs(scores[index].score / 10));
-            if (isNaN(value) || value < 0 || value > 13) {
-                alert("الرجاء إدخال رقم صحيح بين 0 و 13.");
-                return;
-            }
-            newScore = value * -10;
-            break;
-        }
-        case "L": {
-            const value = prompt("أدخل رقمًا بين 0 و 13 للطوش:", Math.abs(scores[index].score / 15));
-            if (isNaN(value) || value < 0 || value > 13) {
-                alert("الرجاء إدخال رقم صحيح بين 0 و 13.");
-                return;
-            }
-            newScore = value * -15;
-            break;
-        }
-        case "B": {
-            const value = prompt("أدخل رقمًا بين 0 و 4 للبنات:", Math.abs(scores[index].score / 25));
-            if (isNaN(value) || value < 0 || value > 4) {
-                alert("الرجاء إدخال رقم صحيح بين 0 و 4.");
-                return;
-            }
-            newScore = value * -25;
-            break;
-        }
-        case "K": {
-            const value = prompt("أدخل رقمًا بين 0 و 1 للشيخ:", Math.abs(scores[index].score / 75));
-            if (isNaN(value) || value < 0 || value > 1) {
-                alert("الرجاء إدخال رقم صحيح بين 0 و 1.");
-                return;
-            }
-            newScore = value * -75;
-            break;
-        }
-        case "T": {
-            const value = prompt("أدخل رقمًا للتريكس (150, 200, 250, 300, 350):", scores[index].score);
-            if (![150, 200, 250, 300, 350].includes(parseInt(value))) {
-                alert("الرجاء اختيار قيمة صحيحة (150, 200, 250, 300, 350).");
-                return;
-            }
-            newScore = parseInt(value);
-            break;
-        }
-    }
+  let newScore = 0;
 
-    // Update the score in our array
-    scores[index].score = newScore;
-    
-    // Update the display
-    const listItem = document.querySelector(`li[data-index="${index}"]`);
-    if (listItem) {
-        const displaySpan = listItem.querySelector("span");
-        displaySpan.textContent = `${category}   ${newScore === 0 ? '-----' : newScore}`;
+  switch (category) {
+    case "D": {
+      const value = prompt(
+        "أدخل رقمًا بين 0 و 13 لديناري:",
+        Math.abs(scores[index].score / 10)
+      );
+      if (isNaN(value) || value < 0 || value > 13) {
+        alert("الرجاء إدخال رقم صحيح بين 0 و 13.");
+        return;
+      }
+      newScore = value * -10;
+      break;
     }
-    
-    // Update total
-    updateTotalScore();
+    case "L": {
+      const value = prompt(
+        "أدخل رقمًا بين 0 و 13 للطوش:",
+        Math.abs(scores[index].score / 15)
+      );
+      if (isNaN(value) || value < 0 || value > 13) {
+        alert("الرجاء إدخال رقم صحيح بين 0 و 13.");
+        return;
+      }
+      newScore = value * -15;
+      break;
+    }
+    case "B": {
+      const value = prompt(
+        "أدخل رقمًا بين 0 و 4 للبنات:",
+        Math.abs(scores[index].score / 25)
+      );
+      if (isNaN(value) || value < 0 || value > 4) {
+        alert("الرجاء إدخال رقم صحيح بين 0 و 4.");
+        return;
+      }
+      newScore = value * -25;
+      break;
+    }
+    case "K": {
+      const value = prompt(
+        "أدخل رقمًا بين 0 و 1 للشيخ:",
+        Math.abs(scores[index].score / 75)
+      );
+      if (isNaN(value) || value < 0 || value > 1) {
+        alert("الرجاء إدخال رقم صحيح بين 0 و 1.");
+        return;
+      }
+      newScore = value * -75;
+      break;
+    }
+    case "T": {
+      const value = prompt(
+        "أدخل رقمًا للتريكس (150, 200, 250, 300, 350):",
+        scores[index].score
+      );
+      if (![150, 200, 250, 300, 350].includes(parseInt(value))) {
+        alert("الرجاء اختيار قيمة صحيحة (150, 200, 250, 300, 350).");
+        return;
+      }
+      newScore = parseInt(value);
+      break;
+    }
+  }
+
+  // Update the score in our array
+  scores[index].score = newScore;
+
+  // Update the display
+  const listItem = document.querySelector(`li[data-index="${index}"]`);
+  if (listItem) {
+    const displaySpan = listItem.querySelector("span");
+    displaySpan.textContent = `${category}   ${
+      newScore === 0 ? "-----" : newScore
+    }`;
+  }
+
+  // Update total
+  updateTotalScore();
 }
 
 function updateTotalScore() {
-    totalScore = scores.reduce((total, score) => total + score.score, 0);
-    document.getElementById("total-score").textContent = `المجموع الكلي: ${totalScore}`;
+  totalScore = scores.reduce((total, score) => total + score.score, 0);
+  document.getElementById(
+    "total-score"
+  ).textContent = `المجموع الكلي: ${totalScore}`;
 }
 
 function handleKingdomCompletion() {
-    const scoreList = document.getElementById("score-list");
-    const hr = document.createElement("hr");
-    Object.assign(hr.style, {
-        border: 'none',
-        height: '2px',
-        backgroundColor: '#333',
-        margin: '20px 0'
-    });
-    scoreList.appendChild(hr);
+  const scoreList = document.getElementById("score-list");
+  const hr = document.createElement("hr");
+  Object.assign(hr.style, {
+    border: "none",
+    height: "2px",
+    backgroundColor: "#333",
+    margin: "20px 0",
+  });
+  scoreList.appendChild(hr);
 
-    alert("تم الانتهاء من هذه المملكة، ننتقل إلى المملكة التالية!");
-    currentKingdom++;
-    if (currentKingdom === 5 ) {
-      if(totalScore > 0) {
-        playWinning();
-        setTimeout(function() {
-          alert("You win! 🥳🥳🥳🥳🥳 ")
+  alert("تم الانتهاء من هذه المملكة، ننتقل إلى المملكة التالية!");
+  currentKingdom++;
+  if (currentKingdom === 5) {
+    if (totalScore > 0) {
+      playWinning();
+      setTimeout(function () {
+        alert("You win! 🥳🥳🥳🥳🥳 ");
         resetGame();
-        }, 3000);
-      } else if(totalScore === 0) {
-        playDraw();
-        setTimeout(function() {
-          alert("العب ختيار لتحديد الفائز");
+      }, 3000);
+    } else if (totalScore === 0) {
+      playDraw();
+      setTimeout(function () {
+        alert("العب ختيار لتحديد الفائز");
         resetGame();
-        }, 3000);
-      }
-      
-      else {
-        playLaugh();
-        setTimeout(function() {
-          alert("You lose! 😭😭😭😭😭");
+      }, 3000);
+    } else {
+      playLaugh();
+      setTimeout(function () {
+        alert("You lose! 😭😭😭😭😭");
         resetGame();
-        }, 3000); 
-       }
-      return;
+      }, 3000);
     }
-    usedChoices = [];
-    updateKingdomTitle();
+    return;
+  }
+  usedChoices = [];
+  updateKingdomTitle();
 
-    // Reset kingdom choices
-    const select = document.getElementById("kingdom-choice");
-    select.innerHTML = ''; // Clear existing options
-    options.forEach((option) => {
-        const optionElement = document.createElement("option");
-        optionElement.value = option.value;
-        optionElement.textContent = option.text;
-        select.appendChild(optionElement);
-    });
+  // Reset kingdom choices
+  const select = document.getElementById("kingdom-choice");
+  select.innerHTML = ""; // Clear existing options
+  options.forEach((option) => {
+    const optionElement = document.createElement("option");
+    optionElement.value = option.value;
+    optionElement.textContent = option.text;
+    select.appendChild(optionElement);
+  });
 }
 function updateKingdomTitle() {
   document.querySelector(
@@ -300,17 +314,15 @@ function updateKingdomTitle() {
 }
 
 function playLaugh() {
-  var audio = document.getElementById('audioLaugh');
-    audio.play()
+  var audio = document.getElementById("audioLaugh");
+  audio.play();
 }
 
 function playWinning() {
-  var audio = document.getElementById('audioWinning');
-    audio.play()
+  var audio = document.getElementById("audioWinning");
+  audio.play();
 }
 function playDraw() {
-  var audio = document.getElementById('audioDraw');
-    audio.play()
+  var audio = document.getElementById("audioDraw");
+  audio.play();
 }
-
-

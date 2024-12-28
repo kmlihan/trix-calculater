@@ -11,17 +11,19 @@ body {
     justify-content: center;
 }
 
-.exit-game {
-    background-color: red ;
+#exit-game {
+    background-color: red;
 }
-.exit-game:hover {
-    background-color: black ;
+
+#exit-game:hover {
+    background-color: black;
 }
+
 .container {
     width: 90%;
     max-width: 600px;
     margin: 20px auto;
-    padding: clamp(15px, 3vw, 30px);
+    padding: 20px;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -29,13 +31,13 @@ body {
 
 h1 {
     color: #333;
-    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-size: 2rem; /* Fixed size */
     margin-bottom: 1.5rem;
     word-wrap: break-word;
 }
 
 h2, h3 {
-    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-size: 1.5rem; /* Fixed size */
 }
 
 .player-names {
@@ -57,14 +59,14 @@ h2, h3 {
 }
 
 button {
-    padding: clamp(8px, 2vw, 12px) clamp(15px, 3vw, 25px);
+    padding: 12px 20px; /* Fixed size */
     margin: 10px 0;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-size: 1rem; /* Fixed size */
     width: 100%;
     max-width: 300px;
     transition: background-color 0.3s ease;
@@ -114,12 +116,12 @@ li {
     border: 1px solid #ddd;
     border-radius: 5px;
     word-wrap: break-word;
-    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-size: 1rem; /* Fixed size */
 }
 
 p {
     font-weight: bold;
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: 1.2rem; /* Fixed size */
 }
 
 /* Media Queries */
@@ -165,16 +167,16 @@ p {
     body {
         background-color: #1a1a1a;
     }
-    
+
     .container {
         background: #2d2d2d;
         color: #ffffff;
     }
-    
+
     h1 {
         color: #ffffff;
     }
-    
+
     li {
         background: #3d3d3d;
         border-color: #4d4d4d;
@@ -188,7 +190,7 @@ p {
         box-shadow: none;
         margin: 0;
     }
-    
+
     button {
         display: none;
     }

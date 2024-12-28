@@ -9,6 +9,7 @@ const options = [
   { value: "T", text: "Trix" },
 ];
 let scores = [];
+ document.getElementById("exit-game").addEventListener("click", exitGame);
 document.getElementById("start-game").addEventListener("click", () => {
   const player1 = document.getElementById("player1").value.trim();
   const player2 = document.getElementById("player2").value.trim();

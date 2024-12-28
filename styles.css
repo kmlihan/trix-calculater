@@ -11,11 +11,11 @@ body {
     justify-content: center;
 }
 
-#exit-game {
-    background-color: red !important;
+.exit-game {
+    background-color: red ;
 }
-#exit-game:hover {
-    background-color: black !important;
+.exit-game:hover {
+    background-color: black ;
 }
 .container {
     width: 90%;

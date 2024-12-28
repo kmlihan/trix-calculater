@@ -16,8 +16,10 @@
         </div>
         <div class="game hidden">
             <h2 id="players"></h2>
+            <p id="total-score">المجموع الكلي: 0</p>
             <div class="round">
                 <h3>المملكة رقم 1</h3>
+            
                 <select id="kingdom-choice">
                     <option value="D">Diamonds</option>
                     <option value="L">Ltoosh</option>
@@ -26,13 +28,20 @@
                     <option value="T">Trix</option>
                 </select>
                 <button id="add-score">إضافة النقاط</button>
+                <button id="exit-game" onclick="exitGame()"> انهاء اللعبة</button>
+
             </div>
             <div class="results">
                 <ul id="score-list"></ul>
-                <p id="total-score">المجموع الكلي: 0</p>
+                
             </div>
         </div>
     </div>
+    <audio id="audioLaugh" src="mp3/evil-laugh.mp3" preload="auto"></audio>
+    <audio id="audioWinning" src="mp3/winning.mp3" preload="auto"></audio>
+    <audio id="audioDraw" src="mp3/draw.mp3" preload="auto"></audio>
+
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -11,6 +11,12 @@ body {
     justify-content: center;
 }
 
+#exit-game {
+    background-color: red !important;
+}
+#exit-game:hover {
+    background-color: black !important;
+}
 .container {
     width: 90%;
     max-width: 600px;

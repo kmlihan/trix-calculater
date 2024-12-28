@@ -24,129 +24,37 @@ document.getElementById("start-game").addEventListener("click", () => {
   document.querySelector(".game").classList.remove("hidden");
 });
 
-// document.getElementById("add-score").addEventListener("click", () => {
-//   const kingdomChoice = document.getElementById("kingdom-choice").value;
-//   const category = kingdomChoice.split("-")[0]; // Extract the main category (e.g., "B" or "K")
+function resetGame() {
+  document.querySelector(".game").classList.add("hidden");
+  document.querySelector(".player-names").classList.remove("hidden");
 
-//   // Check if the category has already been used
-//   if (usedChoices.some((choice) => choice.startsWith(category))) {
-//     alert(`تم استخدام تصنيف ${category} بالفعل في هذه المملكة!`);
-//     return;
-//   }
+window.location.reload();
 
-//   let score = 0;
+}
 
-//   // Handle each category separately
-//   switch (category) {
-//     case "D": {
-//       const dinariValue = prompt("أدخل رقمًا بين 0 و 13 لديناري:");
-//       const value = parseInt(dinariValue);
-//       if (isNaN(value) || value < 0 || value > 13) {
-//         alert("الرجاء إدخال رقم صحيح بين 0 و 13.");
-//         return;
-//       }
-//       score = value * -10;
-//       break;
-//     }
-//     case "L": {
-//       const lValue = prompt("أدخل رقمًا بين 0 و 13 للطوش:");
-//       const value = parseInt(lValue);
-//       if (isNaN(value) || value < 0 || value > 13) {
-//         alert("الرجاء إدخال رقم صحيح بين 0 و 13.");
-//         return;
-//       }
-//       score = value * -15;
-//       break;
-//     }
-//     case "B": {
-//       const bValue = prompt("أدخل رقمًا بين 0 و 4 للبنات:");
-//       const value = parseInt(bValue);
-//       if (isNaN(value) || value < 0 || value > 4) {
-//         alert("الرجاء إدخال رقم صحيح بين 0 و 4.");
-//         return;
-//       }
-//       score = value * -25;
-//       break;
-//     }
-//     case "K": {
-//       const kValue = prompt("أدخل رقمًا بين 0 و 1 للشيخ:");
-//       const value = parseInt(kValue);
-//       if (isNaN(value) || value < 0 || value > 1) {
-//         alert("الرجاء إدخال رقم صحيح بين 0 و 1.");
-//         return;
-//       }
-//       score = value * -75;
-//       break;
-//     }
-//     case "T": {
-//       const tValue = prompt("أدخل رقمًا للتريكس (150, 200, 250, 300, 350):");
-//       const value = parseInt(tValue);
-//       if (![150, 200, 250, 300, 350].includes(value)) {
-//         alert("الرجاء اختيار قيمة صحيحة (150, 200, 250, 300, 350).");
-//         return;
-//       }
-//       score = value;
-//       break;
-//     }
-//     default: {
-//       alert("الرجاء اختيار تسمية صحيحة.");
-//       return;
-//     }
-//   }
-
-//   // Update the total score
-//   totalScore += score;
-
-//   // Add the category to the used choices list
-//   usedChoices.push(kingdomChoice);
-
-//   // Remove the selected option from the dropdown
-//   const selectElement = document.getElementById("kingdom-choice");
-//   const selectedOption = selectElement.querySelector(
-//     `option[value="${kingdomChoice}"]`
-//   );
-//   if (selectedOption) {
-//     selectedOption.remove();
-//   }
-
-//   // Display the new score
-//   const scoreList = document.getElementById("score-list");
-//   const listItem = document.createElement("li");
-//   listItem.textContent = `${category}   ${score === 0 ? '-----' : score}`;
-//   scoreList.appendChild(listItem);
-
-//   // Update the total score display
-//   document.getElementById(
-//     "total-score"
-//   ).textContent = `المجموع الكلي: ${totalScore}`;
-
-//   // If all choices have been used, move to the next kingdom
-//   if (usedChoices.length === 5) {
-//     // Add a line break between kingdoms
-//     const hr = document.createElement("hr");
-//     Object.assign(hr.style, {
-//         border: 'none',
-//         height: '2px',
-//         backgroundColor: '#333',
-//         margin: '20px 0'
-//     });
-//     scoreList.appendChild(hr);
-
-//     alert("تم الانتهاء من هذه المملكة، ننتقل إلى المملكة التالية!");
-//     currentKingdom++;
-//     usedChoices = [];
-//     updateKingdomTitle();
-
-//     const select = document.getElementById("kingdom-choice");
-
-//     options.forEach((option) => {
-//       const optionElement = document.createElement("option");
-//       optionElement.value = option.value;
-//       optionElement.textContent = option.text;
-//       select.appendChild(optionElement);
-//     });
-//   }
-// });
+function exitGame() {
+  if(totalScore > 0) {
+    playWinning();
+    setTimeout(function() {
+      alert("You win! 🥳🥳🥳🥳🥳 ")
+    resetGame();
+    }, 3000);
+  } else if(totalScore === 0) {
+    playDraw();
+    setTimeout(function() {
+      alert("العب ختيار لتحديد الفائز");
+    resetGame();
+    }, 3000);
+  }
+  
+  else {
+    playLaugh();
+    setTimeout(function() {
+      alert("You lose! 😭😭😭😭😭");
+    resetGame();
+    }, 3000); 
+   }
+}
 
 document.getElementById("add-score").addEventListener("click", () => {
     const kingdomChoice = document.getElementById("kingdom-choice").value;
@@ -347,6 +255,30 @@ function handleKingdomCompletion() {
 
     alert("تم الانتهاء من هذه المملكة، ننتقل إلى المملكة التالية!");
     currentKingdom++;
+    if (currentKingdom === 5 ) {
+      if(totalScore > 0) {
+        playWinning();
+        setTimeout(function() {
+          alert("You win! 🥳🥳🥳🥳🥳 ")
+        resetGame();
+        }, 3000);
+      } else if(totalScore === 0) {
+        playDraw();
+        setTimeout(function() {
+          alert("العب ختيار لتحديد الفائز");
+        resetGame();
+        }, 3000);
+      }
+      
+      else {
+        playLaugh();
+        setTimeout(function() {
+          alert("You lose! 😭😭😭😭😭");
+        resetGame();
+        }, 3000); 
+       }
+      return;
+    }
     usedChoices = [];
     updateKingdomTitle();
 
@@ -364,6 +296,20 @@ function updateKingdomTitle() {
   document.querySelector(
     ".round h3"
   ).textContent = `المملكة رقم ${currentKingdom}`;
+}
+
+function playLaugh() {
+  var audio = document.getElementById('audioLaugh');
+    audio.play()
+}
+
+function playWinning() {
+  var audio = document.getElementById('audioWinning');
+    audio.play()
+}
+function playDraw() {
+  var audio = document.getElementById('audioDraw');
+    audio.play()
 }
 
 
